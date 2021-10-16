@@ -1,13 +1,13 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: localhost
-  username: postgres
-  password: '2156'
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
+  host: localhost
+  username: postgres
+  password: '2156'
   database: my_medium_clone_development
 
 test:
@@ -17,5 +17,4 @@ test:
 production:
   <<: *default
   database: my_medium_clone_production
-  username: my_medium_clone
-  password: <%= ENV['MY_MEDIUM_CLONE_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
