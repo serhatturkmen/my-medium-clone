@@ -1,0 +1,10 @@
+
+<h1><%= @comment.title %></h1>
+<p><%= @comment.content %></p>
+<p>
+  <% if @comment.accept %>Onaylanmış
+  <% else %> Onaylanmamış
+  <% end %></p>
+
+
+<%= link_to 'Change visible status', post_comment_accept_path(@comment.post, @comment.id) %>
