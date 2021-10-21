@@ -1,9 +1,6 @@
 class WelcomeController < ApplicationController
   def index
-    @posts = Post.availables
+    redirect_to user_feed_path if current_user
   end
 
-  def user_page
-    @user = User.find(params[:id])
-  end
 end

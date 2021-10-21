@@ -23,7 +23,7 @@ class CommentController < ApplicationController
       comment.update!(accept: true)
     end
     flash[:notice] = 'Process successfully.'
-    redirect_to root_path
+    redirect_to dashboard_path
   end
 
   private

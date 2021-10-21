@@ -1,12 +1,7 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: %i[ show edit update destroy ]
-  before_action :authenticate_user!, except: [:index]
+  before_action :set_post, only: %i[ show edit update destroy vote_add vote_reduce ]
+  before_action :authenticate_user!
   before_action :check_user, only: %i[edit update destroy]
-
-  # GET /posts or /posts.json
-  def index
-    @posts = Post.all
-  end
 
   # GET /posts/1 or /posts/1.json
   def show
@@ -56,6 +51,20 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to posts_url, notice: "Post was successfully destroyed." }
       format.json { head :no_content }
+    end
+  end
+
+  def vote_add
+    @post.update(vote_count: @post.vote_count + 1)
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def vote_reduce
+    @post.update(vote_count: @post.vote_count - 1)
+    respond_to do |format|
+      format.js
     end
   end
 

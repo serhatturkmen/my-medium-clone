@@ -1,8 +1,15 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="col-sm-10">
+    <h1>Posts</h1>
+  </div>
+  <div class="col-sm-2">
+    <%= link_to 'New Post', new_post_path, class: 'btn btn-primary float-right' %>
+  </div>
+</div>
 
-<h1>Posts</h1>
+
 <% if @posts.any? %>
-  <table>
+  <table class="table">
     <thead>
     <tr>
       <th>Title</th>
@@ -16,7 +23,7 @@
     <% @posts.each do |post| %>
       <tr>
         <td><%= post.title %></td>
-        <td><%= post.content %></td>
+        <td><%= substr(post.content) %></td>
         <td><%= post.visible %></td>
         <td><%= link_to 'Show', post %></td>
         <td><%= link_to 'Edit', edit_post_path(post) %></td>
@@ -26,16 +33,24 @@
     </tbody>
   </table>
 <% else %>
-  You don't have a post.
+  <div class="alert alert-warning text-center">
+    You don't have a post.
+  </div>
 <% end %>
 <br>
 
-<h1>Comments</h1>
+
+<div class="row">
+  <div class="col-sm-12">
+    <h1>Comments</h1>
+  </div>
+</div>
 
 <% if @comments.any? %>
-  <table>
+  <table class="table">
     <thead>
     <tr>
+      <th>Post title</th>
       <th>Title</th>
       <th>Content</th>
       <th>Visible</th>
@@ -46,17 +61,25 @@
     <tbody>
     <% @comments.each do |comment| %>
       <tr>
+        <td><%= comment.post.title %></td>
         <td><%= comment.title %></td>
         <td><%= comment.content %></td>
         <td><%= comment.accept %></td>
-        <td><%= link_to 'Accept', post_comment_path(comment.post, comment.id) %></td>
+        <td>
+          <% if comment.accept %>
+            <%= link_to 'Decline', post_comment_path(comment.post, comment.id) %>
+          <% else %>
+            <%= link_to 'Accept', post_comment_path(comment.post, comment.id) %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
     </tbody>
   </table>
 <% else %>
-  No Accepted Comment
+  <div class="alert alert-warning text-center">
+    No Comment
+  </div>
 <% end %>
 
 <br>
-<%= link_to 'New Post', new_post_path %>

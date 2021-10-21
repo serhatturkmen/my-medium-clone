@@ -1,45 +1,56 @@
 <p>
-  <strong>Title:</strong>
+<h1>
   <%= @post.title %>
+</h1>
+</p>
+<p>
+  ✍ <%= link_to @post.user.username, user_detail_path(@post.user) %> | ⏱️<%= @post.created_at %>
 </p>
 
 <p>
-  <strong>Content:</strong>
   <%= @post.content %>
-</p>
-
-<p>
-  <strong>Visible:</strong>
-  <%= @post.visible %>
 </p>
 
 <br>
 
-<h2>Comments</h2>
-
-<% if @comments.any? %>
-  <% @comments.each do |comment| %>
-    <p><%= comment.title %></p>
-    <p><%= comment.content %></p>
-    <hr>
+<p> Vote(<strong id="vote_count"><%= @post.vote_count %></strong>)
+  <% if user_signed_in? && @user != current_user %>
+    <%= link_to '👍', vote_add_post_path(@post), method: :patch, class: 'btn btn-primary', remote: true %>
+    | <%= link_to '👎', vote_reduce_post_path(@post), method: :patch, class: 'btn btn-primary', remote: true %>
   <% end %>
-<% else %>
-  <p>There is no comment</p>
-<% end %>
+</p>
+
+<br>
+
+<div>
+
+  <h2>Comments</h2>
+  <br>
+  <% if @comments.any? %>
+    <% @comments.each do |comment| %>
+      <p><%= comment.title %></p>
+      <p><%= comment.content %></p>
+      <hr>
+    <% end %>
+  <% else %>
+    <p>There is no comment</p>
+  <% end %>
+  <br>
+</div>
 <h2>Add a comment</h2>
 
 <%= form_with model: [@post, @post.comments.build] do |form| %>
   <p>
     <%= form.label :title %>
-    <%= form.text_field :title %>
+    <%= form.text_field :title, class: 'form-control' %>
   </p>
   <p>
     <%= form.label :content %>
-    <%= form.text_area :content %>
+    <%= form.text_area :content, class: 'form-control' %>
   </p>
 
   <p>
-    <%= form.submit %>
+    <%= form.submit :class => 'form-control btn btn-primary' %>
   </p>
 <% end %>
 
@@ -48,4 +59,4 @@
 <% if current_user == @post.user_id %>
   <%= link_to 'Edit', edit_post_path(@post) %> |
 <% end %>
-<%= link_to 'Back', posts_path %>
+<%= link_to 'Back', _back_url %>

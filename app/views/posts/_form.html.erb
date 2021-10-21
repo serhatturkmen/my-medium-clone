@@ -1,6 +1,6 @@
 <%= form_with(model: post) do |form| %>
   <% if post.errors.any? %>
-    <div id="error_explanation">
+    <div class="alert alert-warning" id="error_explanation">
       <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
 
       <ul>
@@ -11,22 +11,22 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :title %>
-    <%= form.text_field :title %>
+  <div class="form-group field">
+    <%= form.label :title%>
+    <%= form.text_field :title, class: "form-control" %>
   </div>
 
-  <div class="field">
+  <div class="form-group field">
     <%= form.label :content %>
-    <%= form.text_area :content %>
+    <%= form.text_area :content, class: "form-control" %>
   </div>
 
-  <div class="field">
+  <div class="form-group form-check field">
+    <%= form.check_box :visible, class: "form-check-input" %>
     <%= form.label :visible %>
-    <%= form.check_box :visible %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
+  <div class="form-group actions">
+    <%= form.submit :class => 'form-control btn btn-primary' %>
   </div>
 <% end %>

@@ -1,0 +1,22 @@
+<h1>DotBlog as Medium</h1>
+
+<% if @posts.any? %>
+  <% for post in @posts %>
+    <div class="jumbotron" style="padding: 10px">
+
+      <h2><%= link_to post.title, post_path(post.id) %></h2>
+      <p>✍ <%= link_to post.user.username, user_detail_path(post.user.id) %> | ⏱️<%= time_ago_in_words(post.created_at) %> ago</p>
+      <p><%= substr(post.content) %></p>
+      <p>Vote: <%= post.vote_count %></p>
+      <br>
+    </div>
+  <% end %>
+<% else %>
+  No post here.
+<% end %>
+<h2 id="test"></h2>
+
+
+<script type="text/javascript" charset="utf-8">
+    $('#test').html = '<h1>Hello</h1>';
+</script>

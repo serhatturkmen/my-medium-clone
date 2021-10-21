@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col-sm-1">
+    <div style="border-radius: 80px;height: 80px; width: 80px;background-color: #666666;"></div>
+  </div>
+  <div class="col-sm-11 mb-5">
+    <strong>Username:</strong> <%= @user.username %>
+    <br>
+    <strong>Email:</strong> <%= @user.email %>
+    <br>
+    <strong>Registered Date:</strong> <%= time_ago_in_words(@user.created_at) %> ago
+    <br>
+    <div id="div_follower">
+      <strong>Follower: </strong> NaN <br>
+      <strong>Following: </strong> NaN
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <h2><%= @user.username %>'s posts</h2>
+  </div>
+  <div class="col-sm-12">
+    <% if @posts.any? %>
+      <table class="table">
+        <thead>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Comment</th>
+        <th>Created Date</th>
+        </thead>
+        <tbody>
+        <% for post in @posts %>
+          <tr>
+            <td><%= link_to post.title, post_path(post.id) %></td>
+            <td><%= substr(post.content) %></td>
+            <td><%= post.comments.count %></td>
+            <td><%= time_ago_in_words(post.created_at) %> ago</td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="alert alert-warning">
+        <%= @user.username %>'s haven't post.
+      </div>
+    <% end %>
+  </div>
+  <div class="col-sm-12">
+    <h2><%= @user.username %>'s comments</h2>
+  </div>
+  <div class="col-sm-12">
+    <% if @comments.any? %>
+      <table class="table">
+        <thead>
+        <th>Post Title</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Created Date</th>
+        </thead>
+        <tbody>
+        <% for comment in @comments %>
+          <tr>
+            <td><%= comment.post.title %></td>
+            <td><%= comment.title %></td>
+            <td><%= substr(comment.content) %></td>
+            <td><%= time_ago_in_words(comment.created_at) %> ago</td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="alert alert-warning">
+        <%= @user.username %>'s haven't comment.
+      </div>
+    <% end %>
+  </div>
+  <br>
+<%= link_to 'back', _back_url, class: 'btn btn-primary' %>
