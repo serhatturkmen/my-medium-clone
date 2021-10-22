@@ -6,6 +6,7 @@ class CommentController < ApplicationController
     @post = Post.find(params[:post_id])
     @comment = @post.comments.create(comment_params)
     @comment.update!(user: current_user)
+    CommentWaitingJob.set(wait: 2.days).perform_later(@comment.id)
     respond_to do |format|
       format.html { redirect_to @post }
       format.js
@@ -17,8 +18,12 @@ class CommentController < ApplicationController
     post = Post.find(params[:post_id])
     comment = post.comments.find(params[:comment_id])
     if comment.post.user.eql?(current_user)
-      comment.update!(status: params[:status_id])
-      flash[:notice] = 'Process successfully.'
+      if comment.locked
+        flash[:warn] = 'Processing time is over.'
+      else
+        comment.update!(status: params[:status_id])
+        flash[:notice] = 'Process successfully.'
+      end
     else
       flash[:warn] = 'Unauthorized process.'
     end
