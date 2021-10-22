@@ -5,13 +5,12 @@ class CommentController < ApplicationController
   def create
     @post = Post.find(params[:post_id])
     @comment = @post.comments.create(comment_params)
-    @comment.update!(user: current_user)
     CommentWaitingJob.set(wait: 2.days).perform_later(@comment.id)
+    @user_comment = @post.comments.where(user_id: current_user).where(status: 0)
     respond_to do |format|
       format.html { redirect_to @post }
-      format.js
+      format.js  { @user_comment }
     end
-    # redirect_to @post
   end
 
   def accept
@@ -42,6 +41,6 @@ class CommentController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:title, :content)
+    params.require(:comment).permit(:title, :content).merge(user: current_user)
   end
 end

@@ -66,13 +66,17 @@
         <td><%= time_ago_in_words(comment.created_at) %></td>
         <td><%= comment_status_text(comment.status) %></td>
         <td class="text-center">
-          <% if comment.status == 0 %>
-            <%= link_to '✔', post_comment_accept_path(comment.post, comment.id, 1) %> |
-            <%= link_to '❌', post_comment_accept_path(comment.post, comment.id, 2) %>
-          <% elsif comment.status == 1 %>
-            <%= link_to '❌', post_comment_accept_path(comment.post, comment.id, 2) %>
+          <% if comment.locked %>
+            Locked
           <% else %>
-            <%= link_to '✔', post_comment_accept_path(comment.post, comment.id, 1) %>
+            <% if comment.status == 0 %>
+              <%= link_to '✔', post_comment_accept_path(comment.post, comment.id, 1) %> |
+              <%= link_to '❌', post_comment_accept_path(comment.post, comment.id, 2) %>
+            <% elsif comment.status == 1 %>
+              <%= link_to '❌', post_comment_accept_path(comment.post, comment.id, 2) %>
+            <% else %>
+              <%= link_to '✔', post_comment_accept_path(comment.post, comment.id, 1) %>
+            <% end %>
           <% end %>
         </td>
       </tr>
