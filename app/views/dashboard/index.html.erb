@@ -49,13 +49,12 @@
 <% if @comments.any? %>
   <table class="table">
     <thead>
-    <tr>
-      <th>Post title</th>
-      <th>Title</th>
-      <th>Content</th>
-      <th>Visible</th>
-      <th colspan="3"></th>
-    </tr>
+    <th>Post title</th>
+    <th>Title</th>
+    <th>Content</th>
+    <th>Created Date</th>
+    <th>Visible</th>
+    <th class="text-center">Comment Process</th>
     </thead>
 
     <tbody>
@@ -64,12 +63,16 @@
         <td><%= comment.post.title %></td>
         <td><%= comment.title %></td>
         <td><%= comment.content %></td>
-        <td><%= comment.accept %></td>
-        <td>
-          <% if comment.accept %>
-            <%= link_to 'Decline', post_comment_path(comment.post, comment.id) %>
+        <td><%= time_ago_in_words(comment.created_at) %></td>
+        <td><%= comment_status_text(comment.status) %></td>
+        <td class="text-center">
+          <% if comment.status == 0 %>
+            <%= link_to '✔', post_comment_accept_path(comment.post, comment.id, 1) %> |
+            <%= link_to '❌', post_comment_accept_path(comment.post, comment.id, 2) %>
+          <% elsif comment.status == 1 %>
+            <%= link_to '❌', post_comment_accept_path(comment.post, comment.id, 2) %>
           <% else %>
-            <%= link_to 'Accept', post_comment_path(comment.post, comment.id) %>
+            <%= link_to '✔', post_comment_accept_path(comment.post, comment.id, 1) %>
           <% end %>
         </td>
       </tr>

@@ -5,7 +5,8 @@ class PostsController < ApplicationController
 
   # GET /posts/1 or /posts/1.json
   def show
-    @comments = @post.comments.accepteds
+    @comments = @post.comments.accepted
+    @user_comment = @post.comments.where(user_id: current_user).where(status: 0)
   end
 
   # GET /posts/new

@@ -2,23 +2,28 @@
   <div class="col-sm-1">
     <div style="border-radius: 80px;height: 80px; width: 80px;background-color: #666666;"></div>
   </div>
-  <div class="col-sm-11 mb-5">
+  <div class="col-sm-6">
     <strong>Username:</strong> <%= @user.username %>
     <br>
     <strong>Email:</strong> <%= @user.email %>
     <br>
     <strong>Registered Date:</strong> <%= time_ago_in_words(@user.created_at) %> ago
     <br>
-    <div id="div_follower">
-      <strong>Follower: </strong> NaN <br>
-      <strong>Following: </strong> NaN
+  </div>
+  <div class="col-sm-5 mb-5">
+    <div id="followers">
+      <strong>Follower: </strong> <%= @user.following.count %> <br>
+      <strong>Following: </strong> <%= @user.followers.count %>
     </div>
+    <% if user_signed_in? && @user != current_user %>
+      <p><%= render 'follow_form' %></p>
+    <% end %>
   </div>
   <div class="col-sm-12">
     <h2><%= @user.username %>'s posts</h2>
   </div>
   <div class="col-sm-12">
-    <% if @posts.any? %>
+    <% if @user.posts.availables.any? %>
       <table class="table">
         <thead>
         <th>Title</th>
@@ -27,7 +32,7 @@
         <th>Created Date</th>
         </thead>
         <tbody>
-        <% for post in @posts %>
+        <% for post in @user.posts.availables %>
           <tr>
             <td><%= link_to post.title, post_path(post.id) %></td>
             <td><%= substr(post.content) %></td>
@@ -58,7 +63,7 @@
         <tbody>
         <% for comment in @comments %>
           <tr>
-            <td><%= comment.post.title %></td>
+            <td><%= link_to comment.post.title, post_path(comment.post.id) %></td>
             <td><%= comment.title %></td>
             <td><%= substr(comment.content) %></td>
             <td><%= time_ago_in_words(comment.created_at) %> ago</td>
@@ -73,4 +78,5 @@
     <% end %>
   </div>
   <br>
-<%= link_to 'back', _back_url, class: 'btn btn-primary' %>
+  <%= link_to 'back', _back_url, class: 'btn btn-primary' %>
+</div>

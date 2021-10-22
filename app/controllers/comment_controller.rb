@@ -1,35 +1,35 @@
 class CommentController < ApplicationController
   before_action :authenticate_user!
-  before_action :is_post_user
+  before_action :is_post_user, only: %i[accept]
 
   def create
     @post = Post.find(params[:post_id])
     @comment = @post.comments.create(comment_params)
     @comment.update!(user: current_user)
-    redirect_to @post
-  end
-
-  def show
-    @post = Post.find(params[:post_id])
-    @comment = @post.comments.find(params[:id])
+    respond_to do |format|
+      format.html { redirect_to @post }
+      format.js
+    end
+    # redirect_to @post
   end
 
   def accept
     post = Post.find(params[:post_id])
     comment = post.comments.find(params[:comment_id])
-    if comment.accept
-      comment.update!(accept: false)
+    if comment.post.user.eql?(current_user)
+      comment.update!(status: params[:status_id])
+      flash[:notice] = 'Process successfully.'
     else
-      comment.update!(accept: true)
+      flash[:warn] = 'Unauthorized process.'
     end
-    flash[:notice] = 'Process successfully.'
     redirect_to dashboard_path
   end
 
   private
 
   def is_post_user
-    unless Post.find(params[:post_id]).user == current_user
+    post = Post.find(params[:post_id])
+    unless post.user == current_user
       respond_to do |format|
         format.html { redirect_to root_path, notice: "You don't permission to page" }
       end

@@ -1,58 +1,110 @@
-<p>
-<h1>
-  <%= @post.title %>
-</h1>
-</p>
-<p>
-  ✍ <%= link_to @post.user.username, user_detail_path(@post.user) %> | ⏱️<%= @post.created_at %>
-</p>
+<div class="row">
+  <div class="col-12">
+    <p>
+    <h1>
+      <%= @post.title %>
+    </h1>
+    </p>
+    <p>
+      ✍ <%= link_to @post.user.username, user_detail_path(@post.user) %> | ⏱️<%= time_ago_in_words(@post.created_at) %>
+    </p>
 
-<p>
-  <%= @post.content %>
-</p>
+    <p>
+      <%= @post.content %>
+    </p>
 
-<br>
-
-<p> Vote(<strong id="vote_count"><%= @post.vote_count %></strong>)
-  <% if user_signed_in? && @user != current_user %>
-    <%= link_to '👍', vote_add_post_path(@post), method: :patch, class: 'btn btn-primary', remote: true %>
-    | <%= link_to '👎', vote_reduce_post_path(@post), method: :patch, class: 'btn btn-primary', remote: true %>
-  <% end %>
-</p>
-
-<br>
-
-<div>
-
-  <h2>Comments</h2>
-  <br>
-  <% if @comments.any? %>
-    <% @comments.each do |comment| %>
-      <p><%= comment.title %></p>
-      <p><%= comment.content %></p>
-      <hr>
-    <% end %>
-  <% else %>
-    <p>There is no comment</p>
-  <% end %>
-  <br>
+    <br>
+    <p> Vote(<strong id="vote_count"><%= @post.vote_count %></strong>)
+      <br>
+      <% if user_signed_in? && @user != current_user %>
+        <%= link_to '👍', vote_add_post_path(@post), method: :patch, class: 'btn btn-primary', remote: true %>
+        | <%= link_to '👎', vote_reduce_post_path(@post), method: :patch, class: 'btn btn-primary', remote: true %>
+      <% end %>
+    </p>
+  </div>
 </div>
-<h2>Add a comment</h2>
+<div class="row">
+  <div class="col-12">
+    <h2>Comments</h2>
+    <hr>
+    <div id="user_comment">
+      <% if @user_comment.any? %>
+        <% @user_comment.each do |comment| %>
+          <div class="card mb-5">
+            <div class="card-heading text-center p-3 border">
+              <b><%= comment.title %></b>
+              <span class="badge badge-pill badge-success float-right">Waiting for Accept</span>
+            </div>
+            <div class="card-body">
+              <%= comment.content %>
+            </div>
+            <div class="card-footer">
+              <div class="row text-center">
+                <div class="col-sm-6">
+                  ✍ <%= comment.user.username %><br>
+                </div>
+                <div class="col-sm-6">
+                  ⏱️ <%= time_ago_in_words(comment.created_at) %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <br>
+    <% if @comments.any? %>
+      <% @comments.each do |comment| %>
+        <div class="card mb-5">
+          <div class="card-heading text-center p-3 border">
+            <b><%= comment.title %></b>
+          </div>
+          <div class="card-body">
+            <%= comment.content %>
+          </div>
+          <div class="card-footer">
+            <div class="row text-center">
+              <div class="col-sm-6">
+                ✍ <%= comment.user.username %><br>
+              </div>
+              <div class="col-sm-6">
+                ⏱️ <%= time_ago_in_words(comment.created_at) %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="alert alert-warning">There is no comment</div>
+    <% end %>
 
-<%= form_with model: [@post, @post.comments.build] do |form| %>
-  <p>
-    <%= form.label :title %>
-    <%= form.text_field :title, class: 'form-control' %>
-  </p>
-  <p>
-    <%= form.label :content %>
-    <%= form.text_area :content, class: 'form-control' %>
-  </p>
+  </div>
+</div>
 
-  <p>
-    <%= form.submit :class => 'form-control btn btn-primary' %>
-  </p>
-<% end %>
+<br>
+
+<div class="row">
+  <div class="col-12">
+    <h2>Add a comment</h2>
+
+    <div id="comment_form">
+      <%= form_with(model: [@post, @post.comments.build], local: false) do |form| %>
+        <p>
+          <%= form.label :title %>
+          <%= form.text_field :title, class: 'form-control' %>
+        </p>
+        <p>
+          <%= form.label :content %>
+          <%= form.text_area :content, class: 'form-control' %>
+        </p>
+
+        <p>
+          <%= form.submit :class => 'form-control btn btn-primary' %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+</div>
 
 <br>
 
