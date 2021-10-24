@@ -12,8 +12,8 @@
   </div>
   <div class="col-sm-5 mb-5">
     <div id="followers">
-      <strong>Follower: </strong> <%= @user.following.count %> <br>
-      <strong>Following: </strong> <%= @user.followers.count %>
+      <strong>Follower: </strong> <%= @user.followers.count %> <br>
+      <strong>Following: </strong> <%= @user.following.count %>
     </div>
     <% if user_signed_in? && @user != current_user %>
       <p><%= render 'follow_form' %></p>

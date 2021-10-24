@@ -30,49 +30,14 @@
     <div id="user_comment">
       <% if @user_comment.any? %>
         <% @user_comment.each do |comment| %>
-          <div class="card mb-5">
-            <div class="card-heading text-center p-3 border">
-              <b><%= comment.title %></b>
-              <span class="badge badge-pill badge-success float-right">Waiting for Accept</span>
-            </div>
-            <div class="card-body">
-              <%= comment.content %>
-            </div>
-            <div class="card-footer">
-              <div class="row text-center">
-                <div class="col-sm-6">
-                  ✍ <%= comment.user.username %><br>
-                </div>
-                <div class="col-sm-6">
-                  ⏱️ <%= time_ago_in_words(comment.created_at) %>
-                </div>
-              </div>
-            </div>
-          </div>
+          <%= render :partial => 'posts/user_comment', :locals => {:comment => comment} %>
         <% end %>
       <% end %>
     </div>
     <br>
     <% if @comments.any? %>
       <% @comments.each do |comment| %>
-        <div class="card mb-5">
-          <div class="card-heading text-center p-3 border">
-            <b><%= comment.title %></b>
-          </div>
-          <div class="card-body">
-            <%= comment.content %>
-          </div>
-          <div class="card-footer">
-            <div class="row text-center">
-              <div class="col-sm-6">
-                ✍ <%= comment.user.username %><br>
-              </div>
-              <div class="col-sm-6">
-                ⏱️ <%= time_ago_in_words(comment.created_at) %>
-              </div>
-            </div>
-          </div>
-        </div>
+        <%= render :partial => 'posts/user_comment', :locals => {:comment => comment} %>
       <% end %>
     <% else %>
       <div class="alert alert-warning">There is no comment</div>
