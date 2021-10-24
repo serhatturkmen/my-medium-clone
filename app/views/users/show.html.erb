@@ -1,6 +1,29 @@
+<style>
+    .user_image {
+        display: block;
+        position: relative;
+        margin: 1px;
+        background: #f00;
+        border-radius: 80px;
+        height: 80px;
+        width: 80px;
+    }
+
+    .user_image:before {
+        content: attr(data-name);
+        color: #fff;
+        position: absolute;
+        font-size: 36px;
+        left: 40%;
+        bottom: 20%;
+        font-weight: bold;
+    }
+</style>
 <div class="row">
   <div class="col-sm-1">
-    <div style="border-radius: 80px;height: 80px; width: 80px;background-color: #666666;"></div>
+    <div class="user_image" data-name="<%= @user.username.first %>">
+      <img src=""/>
+    </div>
   </div>
   <div class="col-sm-6">
     <strong>Username:</strong> <%= @user.username %>

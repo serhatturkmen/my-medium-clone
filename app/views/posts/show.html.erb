@@ -16,7 +16,7 @@
     <br>
     <p> Vote(<strong id="vote_count"><%= @post.vote_count %></strong>)
       <br>
-      <% if user_signed_in? && @user != current_user %>
+      <% if user_signed_in? && @post.user != current_user %>
         <%= link_to '👍', vote_add_post_path(@post), method: :patch, class: 'btn btn-primary', remote: true %>
         | <%= link_to '👎', vote_reduce_post_path(@post), method: :patch, class: 'btn btn-primary', remote: true %>
       <% end %>
@@ -30,14 +30,14 @@
     <div id="user_comment">
       <% if @user_comment.any? %>
         <% @user_comment.each do |comment| %>
-          <%= render :partial => 'posts/user_comment', :locals => {:comment => comment} %>
+          <%= render :partial => 'comment/comment_component', :locals => { :comment => comment } %>
         <% end %>
       <% end %>
     </div>
     <br>
     <% if @comments.any? %>
       <% @comments.each do |comment| %>
-        <%= render :partial => 'posts/user_comment', :locals => {:comment => comment} %>
+        <%= render :partial => 'comment/comment_component', :locals => { :comment => comment } %>
       <% end %>
     <% else %>
       <div class="alert alert-warning">There is no comment</div>
