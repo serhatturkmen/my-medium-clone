@@ -14,7 +14,8 @@ class CommentController < ApplicationController
   end
 
   def accept
-    comment = post.comments.find(params[:comment_id])
+    comment = @post.comments.find(params[:comment_id])
+    comment_deathline(comment)
     if comment.post.user == current_user
       if comment.locked
         flash[:warn] = 'Processing time is over.'
@@ -46,4 +47,13 @@ class CommentController < ApplicationController
   def set_post
     @post = Post.find(params[:post_id])
   end
+
+  def comment_deathline(comment)
+    if (Time.now - comment.created_at) - 172800 > 0
+        comment.update!(locked: true)
+        if comment.status == 0
+            comment.update(status: 1)
+        end
+    end
+end
 end
